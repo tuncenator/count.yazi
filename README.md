@@ -68,9 +68,10 @@ require("count"):setup {
 
 ## Behavior
 
-- Counts are computed once per directory per session and cached by `(url, mtime)`. Modifying a directory invalidates its count automatically on the next fetch.
-- The fetcher runs only for entries whose URL pattern matches `*/` (directories), so file rows incur no extra work.
-- `fs.read_dir` is called inside the async fetcher, never from the render path. The linemode method is a pure cache read.
+- Counts are cached by `(url, mtime)`. Modifying a directory invalidates its count on the next fetch automatically.
+- Read failures (permission denied, broken symlink, etc) are stored with the `unreadable_label` so the row is not blank, and are retried on every subsequent fetch event so transient errors recover without restarting yazi.
+- The fetcher is registered for `url = "*/"` only, so file rows incur no fetcher cost.
+- `fs.read_dir` runs inside the async fetcher; the linemode method is a pure cache read with no I/O.
 - Symlinks are not resolved (`resolve = false`); a symlink to a directory is counted as the link target's entries on Linux because the kernel returns the target's `getdents`. Set yazi's `mgr.show_symlink` independently if you want different visual treatment.
 
 ## Why this plugin exists
