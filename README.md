@@ -53,8 +53,9 @@ The `count` linemode delegates to the built-in `size` linemode for files, so fil
 | `limit`             | integer        | `10000`  | Maximum entries counted per directory. Larger directories short-circuit and display `overflow_label` instead.                        |
 | `overflow_label`    | string         | `"10k+"` | Label for directories with more than `limit` entries.                                                                                |
 | `unreadable_label`  | string         | `"?"`    | Label when the directory cannot be read (permission denied, broken symlink, etc).                                                    |
-| `show_hidden_aware` | boolean        | `true`   | When the manager has `show_hidden = false`, dotfiles are excluded from the count so the displayed number matches what is on screen.  |
 | `style`             | `ui.Style()`  | `nil`    | Optional style applied to the count label.                                                                                           |
+
+The displayed number always reflects what is on screen: when `show_hidden` is off the count excludes dotfiles, when on it includes them. Toggling `show_hidden` updates the label without re-fetching, since both counts are cached together.
 
 Example:
 
